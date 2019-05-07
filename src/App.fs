@@ -13,22 +13,17 @@ type State = {
 
 type Msg =
   | SetNewTodo of string 
-  | AddNewTodo 
+  | AddTodo 
   
-let init() = { 
-  TodoList = [ "Learn F#" ]
-  NewTodo = "" 
-}
+let init() = 
+    { TodoList = [ "Learn F#" ]
+      NewTodo = ""  }
 
 let update (msg: Msg) (state: State) =
   match msg with
-  | SetNewTodo desc -> 
-      { state with NewTodo = desc }
-  
-  | AddNewTodo when String.IsNullOrWhiteSpace state.NewTodo ->
-      state 
-
-  | AddNewTodo ->
+  | SetNewTodo desc -> { state with NewTodo = desc }
+  | AddTodo when state.NewTodo = "" -> state 
+  | AddTodo ->
       { state with 
           NewTodo = ""
           TodoList = List.append state.TodoList [state.NewTodo] }
@@ -46,7 +41,7 @@ let render (state: State) (dispatch: Msg -> unit) =
         ]
       ] 
       div [ Class "control" ] [ 
-        button [ Class "button is-primary is-medium"; OnClick (fun _ -> dispatch AddNewTodo) ] [ 
+        button [ Class "button is-primary is-medium"; OnClick (fun _ -> dispatch AddTodo) ] [ 
           i [ Class "fa fa-plus" ] [ ]
         ]
       ] 
