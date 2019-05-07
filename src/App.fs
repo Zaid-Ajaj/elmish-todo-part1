@@ -8,7 +8,7 @@ open Fable.React.Props
 
 type State = { 
   TodoList: string list 
-  NewTodoDescription : string 
+  NewTodo : string 
 }
 
 type Msg =
@@ -17,21 +17,21 @@ type Msg =
   
 let init() = { 
   TodoList = [ "Learn F#" ]
-  NewTodoDescription = "" 
+  NewTodo = "" 
 }
 
 let update (msg: Msg) (state: State) =
   match msg with
   | SetNewTodoDescription desc -> 
-      { state with NewTodoDescription = desc }
+      { state with NewTodo = desc }
   
-  | AddNewTodo when String.IsNullOrWhiteSpace state.NewTodoDescription ->
+  | AddNewTodo when String.IsNullOrWhiteSpace state.NewTodo ->
       state 
 
   | AddNewTodo ->
       { state with 
-          NewTodoDescription = ""
-          TodoList = List.append state.TodoList [state.NewTodoDescription] }
+          NewTodo = ""
+          TodoList = List.append state.TodoList [state.NewTodo] }
 
 let render (state: State) (dispatch: Msg -> unit) =
   div [ Style [ Padding 30 ] ] [
@@ -41,7 +41,7 @@ let render (state: State) (dispatch: Msg -> unit) =
       div [ Class "control is-expanded" ] [ 
         input [ 
           Class "input is-medium"
-          valueOrDefault state.NewTodoDescription
+          valueOrDefault state.NewTodo
           OnChange (fun ev -> dispatch (SetNewTodoDescription ev.Value)) 
         ]
       ] 
