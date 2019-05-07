@@ -12,7 +12,7 @@ type State = {
 }
 
 type Msg =
-  | SetNewTodoDescription of string 
+  | SetNewTodo of string 
   | AddNewTodo 
   
 let init() = { 
@@ -22,7 +22,7 @@ let init() = {
 
 let update (msg: Msg) (state: State) =
   match msg with
-  | SetNewTodoDescription desc -> 
+  | SetNewTodo desc -> 
       { state with NewTodo = desc }
   
   | AddNewTodo when String.IsNullOrWhiteSpace state.NewTodo ->
@@ -42,7 +42,7 @@ let render (state: State) (dispatch: Msg -> unit) =
         input [ 
           Class "input is-medium"
           valueOrDefault state.NewTodo
-          OnChange (fun ev -> dispatch (SetNewTodoDescription ev.Value)) 
+          OnChange (fun ev -> dispatch (SetNewTodo ev.Value)) 
         ]
       ] 
       div [ Class "control" ] [ 
