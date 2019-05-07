@@ -35,7 +35,7 @@ let update (msg: Msg) (state: State) =
 
 let render (state: State) (dispatch: Msg -> unit) =
   div [ Style [ Padding 30 ] ] [
-    h3 [ Class "title" ] [ str "Elmish To-Do list" ]
+    p [ Class "title" ] [ str "Elmish To-Do list" ]
     // the text box to add new todo items
     div [ Class "field has-addons" ] [
       div [ Class "control is-expanded" ] [ 
