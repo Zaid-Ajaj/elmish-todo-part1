@@ -1,57 +1,89 @@
 module App
 
-open System
 open Elmish
 open Elmish.React
-open Fable.React 
-open Fable.React.Props
+open Feliz
 
-type State = { 
-  TodoList: string list 
-  NewTodo : string 
+type State = {
+  TodoList: string list
+  NewTodo : string
 }
 
 type Msg =
-  | SetNewTodo of string 
-  | AddTodo 
-  
-let init() = 
+  | SetNewTodo of string
+  | AddTodo
+
+let init() =
     { TodoList = [ "Learn F#" ]
       NewTodo = ""  }
 
 let update (msg: Msg) (state: State) =
   match msg with
-  | SetNewTodo desc -> { state with NewTodo = desc }
-  | AddTodo when state.NewTodo = "" -> state 
+  | SetNewTodo desc ->
+      { state with NewTodo = desc }
+
+  | AddTodo when state.NewTodo = "" ->
+      state
+
   | AddTodo ->
-      { state with 
+      { state with
           NewTodo = ""
           TodoList = List.append state.TodoList [state.NewTodo] }
 
+let inputField (state: State) (dispatch: Msg -> unit) =
+  Html.div [
+    prop.classes [ "field"; "has-addons" ]
+    prop.children [
+      Html.div [
+        prop.classes [ "control"; "is-expanded"]
+        prop.children [
+          Html.input [
+            prop.classes [ "input"; "is-medium" ]
+            prop.valueOrDefault state.NewTodo
+            prop.onTextChange (SetNewTodo >> dispatch)
+          ]
+        ]
+      ]
+
+      Html.div [
+        prop.className "control"
+        prop.children [
+          Html.button [
+            prop.classes [ "button"; "is-primary"; "is-medium" ]
+            prop.onClick (fun _ -> dispatch AddTodo)
+            prop.children [
+              Html.i [ prop.classes [ "fa"; "fa-plus" ] ]
+            ]
+          ]
+        ]
+      ]
+    ]
+  ]
+
+let todoList (state: State) (dispatch: Msg -> unit) =
+  Html.unorderedList [
+    prop.children [
+      for todo in state.TodoList ->
+      Html.listItem [
+        prop.classes ["box"; "subtitle"]
+        prop.text todo
+      ]
+    ]
+  ]
+
+let appTitle =
+    Html.p [
+      prop.className "title"
+      prop.text "Elmish To-Do List"
+    ]
+
 let render (state: State) (dispatch: Msg -> unit) =
-  div [ Style [ Padding 30 ] ] [
-    p [ Class "title" ] [ str "Elmish To-Do list" ]
-    // the text box to add new todo items
-    div [ Class "field has-addons" ] [
-      div [ Class "control is-expanded" ] [ 
-        input [ 
-          Class "input is-medium"
-          valueOrDefault state.NewTodo
-          OnChange (fun ev -> dispatch (SetNewTodo ev.Value)) 
-        ]
-      ] 
-      div [ Class "control" ] [ 
-        button [ Class "button is-primary is-medium"; OnClick (fun _ -> dispatch AddTodo) ] [ 
-          i [ Class "fa fa-plus" ] [ ]
-        ]
-      ] 
-    ] 
-    // the actual todo items
-    ul [ Style [ MarginTop 20 ] ] [ 
-      for todo in state.TodoList -> 
-      li [ Class "box" ] [ 
-        p [ Class "subtitle" ] [ str todo ] 
-      ]  
+  Html.div [
+    prop.style [ style.padding 20 ]
+    prop.children [
+      appTitle
+      inputField state dispatch
+      todoList state dispatch
     ]
   ]
 
