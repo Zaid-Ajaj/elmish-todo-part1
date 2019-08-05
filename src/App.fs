@@ -61,10 +61,10 @@ let inputField (state: State) (dispatch: Msg -> unit) =
   ]
 
 let todoList (state: State) (dispatch: Msg -> unit) =
-  Html.unorderedList [
+  Html.ul [
     prop.children [
       for todo in state.TodoList ->
-      Html.listItem [
+      Html.li [
         prop.classes ["box"; "subtitle"]
         prop.text todo
       ]
@@ -72,10 +72,10 @@ let todoList (state: State) (dispatch: Msg -> unit) =
   ]
 
 let appTitle =
-    Html.p [
-      prop.className "title"
-      prop.text "Elmish To-Do List"
-    ]
+  Html.p [
+    prop.className "title"
+    prop.text "Elmish To-Do List"
+  ]
 
 let render (state: State) (dispatch: Msg -> unit) =
   Html.div [
