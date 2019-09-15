@@ -62,12 +62,10 @@ let inputField (state: State) (dispatch: Msg -> unit) =
 
 let todoList (state: State) (dispatch: Msg -> unit) =
   Html.ul [
-    prop.children [
-      for todo in state.TodoList ->
-      Html.li [
-        prop.classes ["box"; "subtitle"]
-        prop.text todo
-      ]
+    for todo in state.TodoList ->
+    Html.li [
+      prop.classes ["box"; "subtitle"]
+      prop.text todo
     ]
   ]
 
