@@ -11,7 +11,7 @@ type State = {
 
 type Msg =
   | SetNewTodo of string
-  | AddTodo
+  | AddNewTodo
 
 let init() =
     { TodoList = [ "Learn F#" ]
@@ -22,10 +22,10 @@ let update (msg: Msg) (state: State) =
   | SetNewTodo desc ->
       { state with NewTodo = desc }
 
-  | AddTodo when state.NewTodo = "" ->
+  | AddNewTodo when state.NewTodo = "" ->
       state
 
-  | AddTodo ->
+  | AddNewTodo ->
       { state with
           NewTodo = ""
           TodoList = List.append state.TodoList [state.NewTodo] }
@@ -50,7 +50,7 @@ let inputField (state: State) (dispatch: Msg -> unit) =
         prop.children [
           Html.button [
             prop.classes [ "button"; "is-primary"; "is-medium" ]
-            prop.onClick (fun _ -> dispatch AddTodo)
+            prop.onClick (fun _ -> dispatch AddNewTodo)
             prop.children [
               Html.i [ prop.classes [ "fa"; "fa-plus" ] ]
             ]
